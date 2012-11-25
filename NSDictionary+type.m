@@ -1,27 +1,83 @@
 //
-//  NSDictionary+type.h
-//  
+//  NSDictionary+type.m
+//  My365
 //
-//  Created by asahi_daiki on 12/08/28.
-//  Copyright (c) 2012 asahi_daiki. All rights reserved.
+//  Created by A12628 on 12/08/28.
+//  Copyright (c) 2012 SIROK, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "NSDictionary+type.h"
 
-@interface NSDictionary (type)
+@implementation NSDictionary (type)
 
-- (NSString *)stringForKey:(NSString *)defaultName;
-- (NSMutableString *)mutableStringForKey:(NSString *)defaultName;
-- (NSArray *)arrayForKey:(NSString *)defaultName;
-- (NSMutableArray *)mutableArrayForKey:(NSString *)defaultName;
-- (NSDictionary *)dictionaryForKey:(NSString *)defaultName;
-- (NSMutableDictionary *)mutableDictionaryForKey:(NSString *)defaultName;
-- (NSData *)dataForKey:(NSString *)defaultName;
-- (NSInteger)integerForKey:(NSString *)defaultName;
-- (float)floatForKey:(NSString *)defaultName;
-- (double)doubleForKey:(NSString *)defaultName;
-- (BOOL)boolForKey:(NSString *)defaultName;
-- (NSURL *)URLForKey:(NSString *)defaultName NS_AVAILABLE(10_6, 4_0);
-- (BOOL)hasKey:(NSString *)element;
+- (NSString *)stringForKey:(NSString *)defaultName {
+    id obj = [self objectForKey:defaultName];
+    
+    // なければnilを返す
+    if(obj == nil)
+        return nil;
+    
+    // 既にNSStringならそのまま返す
+    if([obj isKindOfClass:[NSString class]])
+        return obj;
+    
+    return [NSString stringWithFormat:@"%@",obj];
+}
+
+- (NSMutableString *)mutableStringForKey:(NSMutableString *)defaultName {
+    NSString *str = [self stringForKey:defaultName];
+    NSMutableString *mStr = (NSMutableString *)str;
+    return mStr;
+}
+
+- (NSArray *)arrayForKey:(NSString *)defaultName {
+    NSArray *retArray = [self objectForKey:defaultName];
+    return retArray;
+}
+
+- (NSMutableArray *)mutableArrayForKey:(NSString *)defaultName {
+    NSMutableArray *dict = (NSMutableArray *)[self arrayForKey:defaultName];
+    return dict;
+}
+
+- (NSDictionary *)dictionaryForKey:(NSString *)defaultName {
+    NSDictionary *dict = [self objectForKey:defaultName];
+    return dict;
+}
+
+- (NSMutableDictionary *)mutableDictionaryForKey:(NSString *)defaultName {
+    NSMutableDictionary *dict = (NSMutableDictionary *)[self dictionaryForKey:defaultName];
+    return dict;
+}
+
+- (NSData *)dataForKey:(NSString *)defaultName {
+    NSData *data = [self objectForKey:defaultName];
+    return data;
+}
+
+- (NSInteger)integerForKey:(NSString *)defaultName {
+    return [[self objectForKey:defaultName] integerValue];
+}
+
+- (float)floatForKey:(NSString *)defaultName {
+    return [[self objectForKey:defaultName] floatValue];
+}
+
+- (double)doubleForKey:(NSString *)defaultName {
+    return [[self objectForKey:defaultName] doubleValue];
+}
+
+- (BOOL)boolForKey:(NSString *)defaultName {
+    return [[self objectForKey:defaultName] boolValue];
+}
+
+- (NSURL *)URLForKey:(NSString *)defaultName {
+    NSURL *url = [self objectForKey:defaultName];
+    return url;
+}
+
+- (BOOL)hasKey:(NSString *)element {
+    return [[self allKeys] indexOfObject:element] != NSNotFound;
+}
 
 @end
